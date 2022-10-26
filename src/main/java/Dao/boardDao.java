@@ -5,6 +5,7 @@ import Dto.boardDto;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class boardDao {
     //1단계 Import java.sql.*
@@ -41,5 +42,53 @@ public class boardDao {
         }
         return insertCount;
     }
-    
+    public boardDto getDto(String id){
+        boardDto boardDto=null;
+        Connection conn=null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn= DriverManager.getConnection(url,user,password);
+            String sql="SELECT title,content FROM board WHERE title=?";
+            ps=conn.prepareStatement(sql);
+            ps.setString(1,id);
+
+            rs= ps.executeQuery();
+
+            if(rs.next()){
+                String title=rs.getString(1);
+                String content=rs.getString(2);
+                boardDto=new boardDto(title,content);
+            }
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            if(rs != null){
+                try {
+                    rs.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            if(ps != null){
+                try {
+                    ps.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            if(conn != null){
+                try {
+                    conn.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        return boardDto;
+    }
 }

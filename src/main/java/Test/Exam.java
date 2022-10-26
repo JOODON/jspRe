@@ -4,8 +4,13 @@ import Dto.boardDto;
 import Dao.boardDao;
 public class Exam {
     public static void main(String[] args) {
-        String title="타이틀입니다";
-        String content="컨텐츠입니다";
+        boardDao dao=new boardDao();
+        boardDto dto=dao.getDto("타이틀입니다2");
+        System.out.println(dto);
+    }
+    public static void adddata(String head,String body){
+        String title=head;
+        String content=body;
 
         boardDto dto=new boardDto(title,content);
 
